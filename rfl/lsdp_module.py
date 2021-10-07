@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Jun  6 14:50:44 2020
 
-@author: Lipkin Hollow
-"""
 import numpy as np
 import itertools
 from weighted_levenshtein import lev
