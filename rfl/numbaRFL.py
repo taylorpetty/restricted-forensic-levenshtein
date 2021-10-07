@@ -37,9 +37,7 @@ def encodeasarray(dna,dtype = 'np.int64'):
     else:
         raise ValueError("Invalid dtype.")
 
-#this needs to be @njit-ified to be compatible with
-#the full function later; I guess because it's called
-#within the full function
+#this needs to be @njit-ified to be compatible with the full function later
 @njit
 def arraytoint(intarray):
     '''Numba-compatible: turn an array of ints
@@ -79,32 +77,17 @@ def lsdp_encoded(motif, costs, fwstcost, bwstcost):
     dcosts = np.ones(128, dtype=np.float64)
     scosts = np.ones((128, 128), dtype=np.float64)
 
-    icosts[ord('A')] = costs.loc['','A'] 
-    icosts[ord('C')] = costs.loc['','C']
-    icosts[ord('G')] = costs.loc['','G']
-    icosts[ord('T')] = costs.loc['','T']
-    
-    dcosts[ord('A')]= costs.loc['A','']
-    dcosts[ord('C')]= costs.loc['C','']
-    dcosts[ord('G')]= costs.loc['G','']
-    dcosts[ord('T')]= costs.loc['T','']
-    
-    scosts[ord('A'), ord('C')] = costs.loc['A','C'] 
-    scosts[ord('A'), ord('G')] = costs.loc['A','G']
-    scosts[ord('A'), ord('T')] = costs.loc['A','T']
-    
-    scosts[ord('C'), ord('A')] = costs.loc['C','A']
-    scosts[ord('C'), ord('G')] = costs.loc['C','G']
-    scosts[ord('C'), ord('T')] = costs.loc['C','T']
-    
-    scosts[ord('G'), ord('A')] = costs.loc['G','A']
-    scosts[ord('G'), ord('C')] = costs.loc['G','C']
-    scosts[ord('G'), ord('T')] = costs.loc['G','T']
-    
-    scosts[ord('T'), ord('A')] = costs.loc['T','A']
-    scosts[ord('T'), ord('C')] = costs.loc['T','C']
-    scosts[ord('T'), ord('G')] = costs.loc['T','G']
     alphabet = ['A', 'C', 'G', 'T']
+    
+    for letter in alphabet:
+        
+        icosts[ord(letter)] = costs.loc['',letter]
+        dcosts[ord(letter)] = costs.loc[letter,'']
+        
+        for letter2 in alphabet:
+            if letter2 != letter:
+                scosts[ord(letter),ord(letter2)] = costs.loc[letter,letter2]
+                
     for i in range(1,2*len(motif)):
         for item in itertools.product(alphabet,repeat=i):
             sewn = ''.join(item)            
