@@ -1,20 +1,12 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Nov 23 21:08:21 2020
-
-@author: Lipkin Hollow
-"""
-
 
 import pandas as pd
 import itertools
 from weighted_levenshtein import lev
 import time
 import os
-os.chdir('C:/Users/Lipkin Hollow/Documents/Research/Spyder/RFLclass')
 from rfl_module import rfl
 from lsdp_module import lsdp
-
 import numpy as np
 from numba import jit, njit
 from numba.core import types
@@ -64,7 +56,7 @@ def arraytoint(intarray):
     return val
 
 def lsdp_encoded(motif, costs, fwstcost, bwstcost):
-    '''Standard LSDP but with encoded keys for Numba.
+    '''Standard LSDP but with encoded keys for numba.
     
     Motif is a string.
     Costs is a 5x5 panda with indices and columns named
@@ -121,54 +113,6 @@ def lsdp_encoded(motif, costs, fwstcost, bwstcost):
             bwcost = bwstcost + lev(sewn,motif,insert_costs=icosts,delete_costs=dcosts,substitute_costs=scosts)
             dbw[encode(sewn)] = bwcost
     return dfw, dbw
-
-
-singlereploci = {'CSF1PO':'ATCT',
-                  'TH01':'AATG',
-                  'TPOX':'AATG',
-                  'D5S818':'ATCT',
-                  'D7S820':'TATC',
-                  'D13S317':'TATC',
-                  'D16S539':'GATA',
-                  'D18S51':'AGAA',
-                  'D10S1248':'GGAA',
-                  #####################################
-                  #THIS COULD BE WRONG:
-                  'D2S441':'TCTA',
-                  #####################################
-                  'D22S1045':'ATT',
-                  'PENTAD':'AAAGA',
-                  'PENTAE':'TCTTT'}
-alllocikey = {'CSF1PO':'ATCT',
-                'FGA':['GGAA','GGAG','AAAG','AGAA','AAAA','GAAA'],
-                'TH01':'AATG', #written in file as TH01, not THO1
-                'TPOX':'AATG',
-                'VWA':['TAGA','CAGA'], #complex
-                'D3S1358':['TCTA','TCTG'],
-                'D5S818':'ATCT',
-                'D7S820':'TATC',
-                'D8S1179':['TCTA','TCTG'],
-                'D13S317':'TATC',
-                'D16S539':'GATA',
-                'D18S51':'AGAA',
-                'D21S11':['TCTA','TCTG'],
-                #for D1S: add [CA] as a 'stutter'
-                #add things as motifs if they are strung together
-                #isolated groups like CCTA don't stutter
-                #locus-by-locus
-                #over-expressed? (happens more often than they "should")
-                'D1S1656':'TCTA', #CCTA = flank, 'TAGA', #revcomp?
-                #####################################
-                #THIS COULD BE WRONG:
-                'D2S441':'TCTA',#,'TCAA'], #TCAA?
-                #####################################
-                'D2S1338':['GGCA','GGAA'], 
-                'D10S1248':'GGAA',
-                'D12S391':['AGAT','AGAC'],
-                'D19S433':['CCTT','CCTA'],
-                'D22S1045':'ATT',
-                'PENTAD':'AAAGA',
-                'PENTAE':'TCTTT'}
 
 ##################
 
