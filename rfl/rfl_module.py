@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Jun  6 14:34:12 2020
-
-@author: Lipkin Hollow
-"""
-
 
 ###IN THIS VERSION:
     #indexing is backwards.
